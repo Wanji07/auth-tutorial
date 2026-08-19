@@ -3,6 +3,7 @@ import bcryptjs from 'bcryptjs'
 import { generateVerificationToken } from "../utils/generateVerificationToken.js"
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js"
 import { sendVerificationEmail } from "../mailtrap/emails.js"
+import { sendWelcomeEmail } from "../mailtrap/emails.js"
 
 export const signup = async (req, res) => {
     const {email, name, password} = req.body
@@ -70,15 +71,27 @@ export const verifyEmail = async (req, res) => {
 
         await sendWelcomeEmail(user.email, user.name);
 
+        res.status(200).json({
+            success: true,
+            message: "Email verified successfully",
+            user: {
+                ...user._doc,
+                password: undefined,
+            },
+        })
+
     } catch (error) {
-        
+        res.status(400).json({ success: false, message: error.message }) // http status
     }
 }
 
-export const login = async (req, res) => {
+// 
+
+export const login = async (req, res) => {  
     res.send("login route")
 }
 
 export const logout = async (req, res) => {
-    res.send("logout route")
+    res.clearCookie("token")
+    res.status(200).json({success: true, message: "Logged out successfully!"})
 }

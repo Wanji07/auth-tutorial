@@ -2,6 +2,7 @@ import express from "express"
 import dotenv from "dotenv"
 import cors from "cors"
 import path from "path"
+import cookieParser from 'cookie-parser'
 
 import { connectDB } from "./config/db.js"
 import authRoutes from "./routes/auth.route.js"
@@ -17,6 +18,7 @@ app.use((req, res, next) => {
 })
 
 app.use(express.json())
+app.use(cookieParser())
 
 app.use("/api/auth", authRoutes)
 

@@ -7,6 +7,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { useAuthStore } from "./store/authStore";
 import { useEffect } from "react";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 
 // protect routes that require authentication
@@ -47,6 +48,8 @@ const App = () =>{
   useEffect(() => {
     checkAuth()
   }, [checkAuth])
+
+  if (isCheckingAuth) return <LoadingSpinner />
 
   console.log("isAuthenticated", isAuthenticated)
   console.log("user", user)

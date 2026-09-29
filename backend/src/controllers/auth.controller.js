@@ -140,7 +140,7 @@ export const forgotPassword = async (req, res) => {
         const user = await User.findOne({ email })
 
         if (!user) {
-            res.status(400).json({success: false, message: "User not found!"})
+            return res.status(400).json({success: false, message: "User not found!"})
         }
 
         // Generate Reset Token
@@ -157,9 +157,14 @@ export const forgotPassword = async (req, res) => {
 
         await sendPasswordResetEmail(user.email, `${process.env.CLIENT_URL}/reset-password/${resetToken}`)
 
+        return res.status(200).json({
+            success: true,
+            message: "If an account exists, a reset email has been sent."
+        })
+
     } catch (error) {
         console.log("Error in forgot password", error)
-        res.status(400).json({success: false, message: error.message})
+        return res.status(400).json({success: false, message: error.message})
     }
 }
 
